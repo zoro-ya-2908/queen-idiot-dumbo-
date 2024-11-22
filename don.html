@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happiest Birthday</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* General Styling */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Dancing Script', cursive;
+      overflow: hidden;
+    }
+
+    .page1 {
+      background: linear-gradient(45deg, #f5f7fa, #c3cfe2);
+      animation: fadeInBg 2s ease-in-out forwards;
+    }
+
+    .page2 {
+      background: linear-gradient(45deg, #fffbd5, #b20a2c);
+      animation: fadeInBg 2s ease-in-out forwards;
+    }
+
+    .page3 {
+      background: linear-gradient(45deg, #ffecd2, #fcb69f);
+      animation: fadeInBg 2s ease-in-out forwards;
+    }
+
+    @keyframes fadeInBg {
+      from {
+        background: linear-gradient(45deg, #ffffff, #ffffff);
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Content Fade-in Animation */
+    .container {
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInText 2s ease-out forwards 1s;
+    }
+
+    @keyframes fadeInText {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Gradient Text Styling */
+    .gradient-text {
+      font-size: 6vw; /* Scales with screen width */
+      font-weight: bold;
+      background: linear-gradient(90deg, #6a0572, #c471ed, #f64f59);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    /* Button Styling */
+    .button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      color: #6a0572;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+      margin: 20px;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+      background: linear-gradient(45deg, #fad0c4, #ff9a9e);
+    }
+
+    /* Sparkling Cursor */
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #f9a8d4 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: sparkle-fade 1s ease-out forwards;
+    }
+
+    @keyframes sparkle-fade {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Styling for the "No" Button */
+    .no-button {
+      position: absolute;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .gradient-text {
+        font-size: 8vw; /* Increase font size slightly */
+      }
+
+      .button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem; /* Smaller button text */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gradient-text {
+        font-size: 10vw; /* Even larger on very small screens */
+      }
+
+      .button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem; /* Further reduce button size */
+      }
+    }
+  </style>
+</head>
+<body class="page1">
+  <div class="container" id="content">
+    <!-- Page 1: Happiest Birthday -->
+    <h1 class="gradient-text">Happiest Birthday</h1>
+    <button class="button" onclick="goToWishPage()">Special Message</button>
+  </div>
+
+  <script>
+    /* Cursor Effect */
+    document.addEventListener("mousemove", (e) => {
+      const sparkle = document.createElement("div");
+      sparkle.className = "sparkle";
+      sparkle.style.left = `${e.clientX}px`;
+      sparkle.style.top = `${e.clientY}px`;
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 1000);
+    });
+
+    function goToWishPage() {
+      document.body.className = 'page2';
+      document.getElementById('content').innerHTML = `
+        <div class="container">
+          <h1 class="gradient-text">A Warm Birthday Wish</h1>
+          <p style="font-size: 1.5rem; color: #6a0572;">
+            May your day be filled with joy, smiles, and the company of those you hold dear. 
+            Here's to celebrating all the love and happiness you bring to everyone’s lives. 🎉
+          </p>
+          <button class="button" onclick="goToGiftPage()">Proceed to Special Gift</button>
+        </div>
+      `;
+    }
+
+    function goToGiftPage() {
+      document.body.className = 'page3';
+      document.getElementById('content').innerHTML = `
+        <div class="container">
+          <h1 class="gradient-text">Apologies Accepted?</h1>
+          <div>
+            <button class="button" onclick="showMessage()">Yes</button>
+            <button class="button no-button" id="noButton">No</button>
+          </div>
+        </div>
+      `;
+      activateNoButton();
+    }
+
+    let noButtonMoveCount = 0;
+
+    function activateNoButton() {
+      const noButton = document.getElementById('noButton');
+      const margin = 50;
+      const maxX = window.innerWidth - noButton.offsetWidth - margin;
+      const maxY = window.innerHeight - noButton.offsetHeight - margin;
+
+      noButton.addEventListener('mousemove', () => {
+        if (noButtonMoveCount < 4) {
+          const x = Math.random() * 200 + margin;
+          const y = Math.random() * 200 + margin;
+          noButton.style.left = `${Math.min(x, maxX)}px`;
+          noButton.style.top = `${Math.min(y, maxY)}px`;
+          noButtonMoveCount++;
+        } else {
+          const x = Math.random() * maxX;
+          const y = Math.random() * maxY;
+          noButton.style.left = `${Math.max(margin, Math.min(x, maxX))}px`;
+          noButton.style.top = `${Math.max(margin, Math.min(y, maxY))}px`;
+        }
+      });
+    }
+
+    function showMessage() {
+      alert("Thank you! ❤️");
+    }
+  </script>
+</body>
+</html>
